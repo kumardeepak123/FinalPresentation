@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,5 +17,9 @@ namespace CPMS.Dtos
         public string AgreementPaperName { get; set; }
         public string ProfileImageSrc { get; set; }
         public string AgreementPaperSrc { get; set; }
+
+        public IFormFile ProfileImageFile { get; set; }
+        public IFormFile AgreementPaperFile { get; set; }
+
     }
 }

@@ -11,4 +11,3 @@ C:\Users\1000074028\Desktop\CPMS_Project\backend\CPMS\CPMS\obj\Debug\netcoreapp2
 C:\Users\1000074028\Desktop\CPMS_Project\backend\CPMS\CPMS\obj\Debug\netcoreapp2.1\CPMS.RazorTargetAssemblyInfo.cache
 C:\Users\1000074028\Desktop\CPMS_Project\backend\CPMS\CPMS\obj\Debug\netcoreapp2.1\CPMS.dll
 C:\Users\1000074028\Desktop\CPMS_Project\backend\CPMS\CPMS\obj\Debug\netcoreapp2.1\CPMS.pdb
-C:\Users\1000074028\Desktop\CPMS_Project\backend\CPMS\CPMS\obj\Debug\netcoreapp2.1\CPMS.csprojAssemblyReference.cache

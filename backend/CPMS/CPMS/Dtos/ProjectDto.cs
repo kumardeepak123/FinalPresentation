@@ -17,6 +17,8 @@ namespace CPMS.Dtos
         public long Budget { get; set; }
         public string Status { get; set; }
 
+        public ClientWithIdAndName Client { get; set; }
         public ICollection<TeamWithIdAndNameDto> Teams { get; set; }
+
     }
 }

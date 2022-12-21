@@ -54,30 +54,31 @@ namespace CPMS.Repository
        
         public async Task<bool> DeleteProject(int id)
         {
-            //var project = await cPMDbContext.Projects.Where(x => x.Id == id).FirstOrDefaultAsync();
-            //if (project == null) return false;
+            var project = await cPMDbContext.Projects.Where(x => x.Id == id).FirstOrDefaultAsync();
+            if (project == null) return false;
 
-            //var _Teams = await cPMDbContext.Teams.Where(x => x.ProjectId == id).ToListAsync();
-            //if(_Teams != null && _Teams.Count >= 1)
-            //{
-            //    foreach(var t in _Teams)
-            //    {
-            //        t.ProjectId = null;
+            cPMDbContext.Projects.Remove(project);
 
-            //    }
-            //}
+            var _Teams = await cPMDbContext.Teams.Where(x => x.ProjectId == id).ToListAsync();
+            if (_Teams != null && _Teams.Count >= 1)
+            {
+                foreach (var t in _Teams)
+                {
+                    cPMDbContext.Teams.Remove(t);
 
-            //var _client_projects = await cPMDbContext.Client_Projects.Where(x => x.ProjectId == id).ToListAsync();
-            //if(_client_projects!= null && _client_projects.Count >= 1)
-            //{
-            //    foreach(var r in _client_projects)
-            //    {
-            //        cPMDbContext.Client_Projects.Remove(r);
-            //    }
-            //}
-            //cPMDbContext.Projects.Remove(project);
+                }
+            }
 
-            //await cPMDbContext.SaveChangesAsync();
+            try
+            {
+                await cPMDbContext.SaveChangesAsync();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
+            
             return true;
         }
        
@@ -85,7 +86,7 @@ namespace CPMS.Repository
         {
             if(id !=null)
             {
-                var project = await cPMDbContext.Projects.Where(p => p.Id == id).Select(x => new Project
+                var project = await cPMDbContext.Projects.Where(p => p.Id == id).Select(x => new ProjectDto
                 {
 
                     Name = x.Name,
@@ -96,7 +97,8 @@ namespace CPMS.Repository
                     NFRequirement = x.NFRequirement,
                     Technology = x.Technology,
                     Status = x.Status,
-                    Teams = x.Teams.Select(t => new Team
+                    Client = x.Client_Projects.Where(e=>e.ProjectId == id).Select(k => new ClientWithIdAndName {Id=k.ClientId, Name= k.Client.Name}).FirstOrDefault(),
+                    Teams = x.Teams.Select(t => new TeamWithIdAndNameDto
                     {
                         Id = t.Id,
                         Name = t.Name
@@ -105,7 +107,7 @@ namespace CPMS.Repository
 
                 }).ToListAsync();
                 if (project == null) return null;
-                return _IMapper.Map<IList<ProjectDto>>(project);
+                return project;
             }
             else
             {

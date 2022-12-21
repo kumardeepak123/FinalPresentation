@@ -15,7 +15,7 @@ namespace CPMS.Repository
         
         Task<IEnumerable> GetProject(int? id); //D
         Task<bool> UpdateProject(int id, ProjectDto project, int[] TeamIds); //D
-        Task<bool> DeleteProject(int id); //
+        Task<bool> DeleteProject(int id); //D
         Task<List<ProjectWithNameAndIdDto>> GetProjectsUnderClient(int id); //
         Task<List<ProjectWithNameAndIdDto>> GetProjectsForAssignmentToClient(); //
     }  

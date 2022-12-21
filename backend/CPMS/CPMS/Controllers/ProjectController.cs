@@ -66,17 +66,17 @@ namespace CPMS.Controllers
             return Ok(new { message = "Updated successfully" });
         }
 
-        //[HttpDelete("delete-project/{id}")]
-        ////[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> DeleteProject(int id)
-        //{
-        //    var res = await _IProjectRepo.DeleteProject(id);
-        //    if (!res)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(new { Message = "Deleted successfully" });
-        //}
+        [HttpDelete("{id}")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteProject(int id)
+        {
+            var res = await _IProjectRepo.DeleteProject(id);
+            if (!res)
+            {
+                return NotFound();
+            }
+            return Ok(new { Message = "Deleted successfully" });
+        }
 
 
         //[HttpGet("projects-under-client/{id}")]
