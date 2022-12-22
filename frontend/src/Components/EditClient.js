@@ -11,7 +11,9 @@ import {
     MDBTextArea,
     MDBFile
   }
+ 
   from 'mdb-react-ui-kit';
+  import {getClient, getProjectsUnderClient, editClient, getProjectsForAssignmentToClient} from '../Apicalls/ClientAPI'
   import { toast, ToastContainer } from 'react-toastify';
   import "react-toastify/dist/ReactToastify.css";
   import Select from 'react-select';
@@ -19,8 +21,7 @@ import {
   const animatedComponents = makeAnimated();
 
 const EditClient=()=>{
-    const[client, setClient]= useState({
-        "id": 2,
+    const[client, setClient]= useState({    
         "name": "",
         "email": "",
         "password": "",
@@ -51,23 +52,16 @@ const EditClient=()=>{
             "clientId": 0
         }
     );
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOption, setSelectedOption] = useState([]);//
 
     const user =  JSON.parse(localStorage.getItem('user-info'));
     const navigate = useNavigate();
     const {id} = useParams();
 
-    const loadAdminInfo= async()=>{
-        
-        await fetch(`http://localhost:44327/api/Client/client-details/${id}`,{
-           headers:{
-               "Authorization" : `Bearer ${user.token}`
-           }
-        })
-        .then(res=> res.json())
+    const loadAdminInfo= async()=>{      
+        getClient(id, user.token,"","","")
         .then(res=>{
-           setClient(res);
-           
+           setClient(res[0]);          
         })
         .catch(err=>console.log(err));
     }
@@ -75,54 +69,52 @@ const EditClient=()=>{
     const handleChangeDropdown = e => {
       setSelectedOption(e);
   }
-  const loadProjects=async()=>{
-    await fetch(`http://localhost:44327/api/Project/all-projects`,{
-          headers:{
-            Authorization: `Bearer ${user.token}`
-          }
-        })
-        .then(res=>res.json())
+  const loadProjects=()=>{
+        getProjectsForAssignmentToClient(user.token)
         .then(res=>{
           
           const temp= 
           [
           ];
-
+          
+        
         for(var i=0;i<res.length;i++)
         {
           const obj={label:'', Id:0, value:0};
           obj.label = res[i].name;
           obj.Id = res[i].id;
-          obj.value = i;
+          obj.value = i+100;
           temp.push(obj);
+          
         }
+        
         setProjects(temp);
+        loadAssignedProjects();
         
         })
         
   }
 
-  const loadAssignedProjects=async()=>{
-    await fetch(`http://localhost:44327/api/Project/projects-under-client/${id}`,{
-          headers:{
-            Authorization: `Bearer ${user.token}`
-          }
-        })
-        .then(res=>res.json())
+  const loadAssignedProjects=()=>{
+        getProjectsUnderClient(id, user.token)
         .then(res=>{
           
           const temp= 
           [
           ];
-
+        //let projs= [...projects];
         for(var i=0;i<res.length;i++)
         {
           const obj={label:'', Id:0, value:0};
           obj.label = res[i].name;
           obj.Id = res[i].id;
-          obj.value = i;
+          obj.value = i+150;
           temp.push(obj);
+          //projs.push(obj);
         }
+        
+        //alert(projs[0].label+" "+projs[1].label)
+       // setProjects(projs);       
         setSelectedOption(temp);
         
         })
@@ -130,9 +122,10 @@ const EditClient=()=>{
 
 
     useEffect(()=>{
-        loadAdminInfo();
-        loadProjects();
+        loadAdminInfo(); 
+        //loadProjects();                
         loadAssignedProjects();
+        
      },[])
 
     const handleChange=name=>(event)=>{
@@ -203,15 +196,8 @@ const EditClient=()=>{
             projectIds = projectIds.slice(0,-1);
 
             
-
-            fetch(`http://localhost:44327/api/Client/update-client/${client.id}?ProjectIds=${projectIds}`,{
-            method:'PUT',
-            headers:{
-                "Authorization" : `Bearer ${user.token}`
-            },
-            body: formData
-         })
-         .then(res=>res.json())
+         
+         editClient(id,formData,user.token,projectIds)
          .then(res=>{
             
           toast.success("Details saved successfully !", {

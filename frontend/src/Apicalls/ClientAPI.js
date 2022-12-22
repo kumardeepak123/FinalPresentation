@@ -35,8 +35,8 @@ export const getProjectsUnderClient=async(id, token)=>{
           .catch(err=>console.log(err))
 }
 
-export const getProjectsForAssignmentToClient=(token)=>{
-    return  fetch(`${BASE_URL}/Project/projects/for/assignment`,{
+export const getProjectsForAssignmentToClient=async(token)=>{
+    return  await fetch(`${BASE_URL}/Project/projects/for/assignment`,{
             headers:{
               Authorization: `Bearer ${token}`
             }
@@ -58,4 +58,29 @@ export const createClient=( token, projectIds, formData)=>{
          .then(res=>res.json())
          .then(res=>res)
          .catch(err=>console.log(err))
+}
+
+export const editClient=async(id,formData,token,projectIds)=>{
+    return await fetch(`${BASE_URL}/Client/${id}?ProjectIds=${projectIds}`,{
+        method:'PUT',
+        headers:{
+            "Authorization" : `Bearer ${token}`
+        },
+        body: formData
+     })
+     .then(res=>res.json())
+     .then(res=>res)
+     .catch(err=>console.log(err))
+}
+
+export const deleteClient= async(id, token)=>{
+    return fetch(`${BASE_URL}/Client/${id}`,{
+        method:'DELETE',
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+      .then(r=>r.json())
+      .then(r=>r)
+      .catch(err=>console.log(err));
 }

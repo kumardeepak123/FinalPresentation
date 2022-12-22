@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from "react";
 import {useNavigate} from 'react-router-dom'
 import ReactPaginate from 'react-paginate';
-import {getClient} from '../Apicalls/ClientAPI'
+import {getClient, deleteClient} from '../Apicalls/ClientAPI'
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 let items= [];
@@ -39,13 +39,7 @@ const HandleClients=()=>{
           return;
         }
         
-            fetch(`http://localhost:44327/api/Client/delete-client/${clientID}`,{
-              method:'DELETE',
-              headers:{
-                Authorization:`Bearer ${user.token}`
-              }
-            })
-            .then(r=>r.json())
+            deleteClient(clientID, user.token)
             .then(r=>{
               toast.success(clientName+" deleted successfully", {
                 position: toast.POSITION.TOP_RIGHT
