@@ -38,7 +38,7 @@ namespace CPMS.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Employee")]
+        //[Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetTeam([FromQuery]int? id=null)
         {
 

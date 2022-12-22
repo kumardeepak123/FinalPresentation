@@ -39,6 +39,7 @@ namespace CPMS.Controllers
         [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetEmployee([FromQuery]int? id= null)
         {
+
             var _employee = await _IEmployeeRepo.GetEmployee(id);
             if (_employee == null)
             {

@@ -127,71 +127,50 @@ namespace CPMS.Repository
         public async Task<List<ProjectWithNameAndIdDto>> GetProjectsUnderClient(int id)
         {
 
-            //var _Client = await cPMDbContext.Clients.Where(x => x.Id == id).Select(x=> new Client { 
-            //    Id = x.Id,
-            //    Client_Projects= x.Client_Projects
-            //}).FirstOrDefaultAsync();
-            //List<Project> _Projects = new List<Project>();
-            //foreach(var e in _Client.Client_Projects)
-            //{
-            //    var _Project = await cPMDbContext.Projects.Where(x => x.Id == e.ProjectId).Select(x=> new Project { 
-            //        Id = x.Id,
-            //        Name= x.Name,
-            //        FRequirement = x.FRequirement,
-            //        NFRequirement= x.NFRequirement,
-            //        Budget =x.Budget,
-            //        StartDate =x.StartDate,
-            //        EndDate =x.EndDate,
-            //        Technology =x.Technology,
-            //        Status = x.Status
-            //    }).FirstOrDefaultAsync();
-            //    _Projects.Add(_Project);
-            //}
+            var _Client = await cPMDbContext.Clients.Where(x => x.Id == id).FirstOrDefaultAsync();
+            if (_Client == null) return null;
 
-            //return _Projects;
-            return null;
+            var res = await cPMDbContext.Client_Projects.Where(x => x.ClientId == id)
+                      .Select(x => new ProjectWithNameAndIdDto
+                      {
+                          Id = x.ProjectId,
+                          Name = x.Project.Name
+                      }).ToListAsync();
+            return res;
+            
         }
 
         
         public async Task<List<ProjectWithNameAndIdDto>> GetProjectsForAssignmentToClient()
         {
-            //var projects = await cPMDbContext.Projects.Select(x=> new Project { 
-            //    Id= x.Id,
-            //    Name= x.Name,
-            //    FRequirement=x.FRequirement,
-            //    NFRequirement= x.NFRequirement,
-            //    Budget= x.Budget,
-            //    Technology =x.Technology,
-            //    Status =x.Status
-            //}).ToListAsync();
+            var projects = await cPMDbContext.Projects.Select(x => new ProjectWithNameAndIdDto
+            {
+                Id = x.Id,
+                Name = x.Name              
+            }).ToListAsync();
 
-            //HashSet<int> _ProjectIds = new HashSet<int>();
-            //var _ClientProjects = await cPMDbContext.Client_Projects.ToListAsync();
+            HashSet<int> _ProjectIds = new HashSet<int>();
+            var _ClientProjects = await cPMDbContext.Client_Projects.ToListAsync();
 
-            //foreach(var e in _ClientProjects)
-            //{
+            foreach (var e in _ClientProjects)
+            {
 
-            //        _ProjectIds.Add((int)e.ProjectId);
+                _ProjectIds.Add((int)e.ProjectId);
 
-            //}
-            //if(_ProjectIds.Count == 0)
-            //{
-            //    return projects;
-            //}
+            }
+            if (_ProjectIds.Count == 0)
+            {
+                return projects;
+            }
 
 
-            //return await cPMDbContext.Projects.Where(x => _ProjectIds.Contains(x.Id) == false).Select(x => new Project
-            //{
-            //    Id = x.Id,
-            //    Name = x.Name,
-            //    FRequirement = x.FRequirement,
-            //    NFRequirement = x.NFRequirement,
-            //    Budget = x.Budget,
-            //    Technology = x.Technology,
-            //    Status = x.Status
-            //}).ToListAsync();
+            return await cPMDbContext.Projects.Where(x => _ProjectIds.Contains(x.Id) == false).Select(x => new ProjectWithNameAndIdDto
+            {
+                Id = x.Id,
+                Name = x.Name
+            }).ToListAsync();
 
-            return null;
+           
         }
 
         

@@ -38,7 +38,7 @@ namespace CPMS.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Client")]
+        //[Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> GetProject([FromQuery]int? id)
         {
             var project = await _IProjectRepo.GetProject(id);
@@ -79,31 +79,31 @@ namespace CPMS.Controllers
         }
 
 
-        //[HttpGet("projects-under-client/{id}")]
-        ////[Authorize(Roles = "Admin,Client")]
-        //public async Task<ActionResult<IEnumerable<Project>>> GetProjectsUnderClient(int id)
-        //{
-        //    var projects = await _IProjectRepo.GetProjectsUnderClient(id);
-        //    if (projects == null || projects.Count == 0)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("under/client/{id}")]
+        [Authorize(Roles = "Admin,Client")]
+        public async Task<ActionResult<IEnumerable<ProjectWithNameAndIdDto>>> GetProjectsUnderClient(int id)
+        {
+            var projects = await _IProjectRepo.GetProjectsUnderClient(id);
+            if (projects == null || projects.Count == 0)
+            {
+                return NotFound();
+            }
 
-        //    return Ok(projects);
-        //}
+            return Ok(projects);
+        }
 
-        //[HttpGet("projects-for-assignment")]
-        ////[Authorize(Roles = "Admin")]
-        //public async Task<ActionResult<IEnumerable<Project>>> GetProjectsForAssignmentToClient()
-        //{
-        //    var projects = await _IProjectRepo.GetProjectsForAssignmentToClient();
-        //    if (projects == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("projects/for/assignment")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjectsForAssignmentToClient()
+        {
+            var projects = await _IProjectRepo.GetProjectsForAssignmentToClient();
+            if (projects == null )
+            {
+                return NotFound();
+            }
 
-        //    return Ok(projects);
-        //}
+            return Ok(projects);
+        }
 
         /* [HttpPut("update/clientIds/{id}")]
          [Authorize(Roles = "Admin")]
