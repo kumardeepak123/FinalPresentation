@@ -70,7 +70,7 @@ namespace CPMS
             services.AddScoped<IProjectRepo, ProjectRepo>();
             services.AddScoped<IEmployeeRepo, EmployeeRepo>();
             services.AddScoped<ITeamRepo, TeamRepo>();
-            //services.AddScoped<IAdminRepo, AdminRepo>();
+            services.AddScoped<IAuthRepo, AuthRepo>();
             //services.AddCors();
             
         }

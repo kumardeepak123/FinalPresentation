@@ -1,6 +1,7 @@
 ﻿using CPMS.Dtos;
 using CPMS.Models;
 using CPMS.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,6 +22,7 @@ namespace CPMS.Controllers
         }
 
         [HttpPost()]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> CreateTeam([FromBody]TeamDto team, string employeeIds)
         {
             int[] _EmployeeIds = employeeIds.Trim().Split(",").Select(e => Convert.ToInt32(e)).ToArray();
@@ -36,6 +38,7 @@ namespace CPMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetTeam([FromQuery]int? id=null)
         {
 
@@ -49,6 +52,7 @@ namespace CPMS.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTeam(int id)
         {
 
@@ -62,12 +66,14 @@ namespace CPMS.Controllers
         }
 
         [HttpGet("noproject")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetTeamsWithNoProject()
         {
             return Ok(await _ITeamRepo.GetTeamsWithNoProject());
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditTeam(int id, [FromBody]TeamDto team, string employeeIds)
         {
             int[] _EmployeeIds = employeeIds.Trim().Split(",").Select(e => Convert.ToInt32(e)).ToArray();

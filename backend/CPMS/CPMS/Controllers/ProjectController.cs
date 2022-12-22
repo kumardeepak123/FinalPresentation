@@ -24,7 +24,7 @@ namespace CPMS.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateProject([FromBody] ProjectDto project, string TeamIds)
         {
             int[] _TeamIds = TeamIds.Trim().Split(",").Select(e => Convert.ToInt32(e)).ToArray();
@@ -38,7 +38,7 @@ namespace CPMS.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin,Client")]
+        [Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> GetProject([FromQuery]int? id)
         {
             var project = await _IProjectRepo.GetProject(id);
@@ -53,7 +53,7 @@ namespace CPMS.Controllers
 
 
         [HttpPut("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> UpdateProject(int id, ProjectDto project, string TeamIds)
         {
             int[] _TeamIds = TeamIds.Trim().Split(",").Select(e => Convert.ToInt32(e)).ToArray();
@@ -67,7 +67,7 @@ namespace CPMS.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             var res = await _IProjectRepo.DeleteProject(id);

@@ -41,7 +41,7 @@ namespace CPMS.Controllers
 
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateClient([FromForm] ClientDto client, string ProjectIds)
         {
             int[] _ProjectIds = ProjectIds.Trim().Split(",").Select(i => Convert.ToInt32(i)).ToArray();
@@ -64,7 +64,7 @@ namespace CPMS.Controllers
         }
 
         [HttpGet]   
-        //[Authorize(Roles = "Admin,Client")]
+        [Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> GetClient(string sortBy, string orderBy, string searchByName, [FromQuery]int? id = null)
         {
             var client = await _IClientRepo.getClient(id,sortBy, orderBy, searchByName);
@@ -98,57 +98,9 @@ namespace CPMS.Controllers
         //    return Ok(clients);
         //}
 
-        //[AllowAnonymous]
-        //[HttpPost("signin")]
-        //public async Task<IActionResult> SignIn(string email, string password)
-        //{
-        //    var user = await Authenticate(email, password);
-        //    if (user != null)
-        //    {
-        //        var token = Generate(user);
-        //        return Ok(new
-        //        {
-        //            message = "SignIn successfull",
-        //            UserId = user.Id,
-        //            Role = "Client",
-        //            Token = token
-        //        });
-        //    }
-
-        //    return NotFound(new { message = "User Not Found" });
-        //}
-
-        //[NonAction]
-        //private string Generate(Client user)
-        //{
-        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        //    var claims = new[]
-        //    {
-        //         new Claim(ClaimTypes.NameIdentifier, user.Name),
-        //         new Claim(ClaimTypes.Email, user.Email),
-        //         new Claim(ClaimTypes.Role, "Client")
-        //     };
-
-        //    var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-        //      _config["Jwt:Audience"],
-        //      claims,
-        //      expires: DateTime.Now.AddMinutes(15),
-        //      signingCredentials: credentials);
-
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
-
-        //[NonAction]
-        //private async Task<Client> Authenticate(string email, string password)
-        //{
-        //    var client = await _IClientRepo.SignIn(email, password);
-        //    return client;
-        //}
 
         [HttpPut("{id}")]
-        //[Authorize(Roles = "Admin,Client")]
+        [Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> UpdateClient(int id, [FromForm] ClientDto client, string ProjectIds)
         {
             int[] _ProjectIds = ProjectIds.Trim().Split(",").Select(i => Convert.ToInt32(i)).ToArray();
@@ -173,7 +125,7 @@ namespace CPMS.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> DeleteClient(int id)
         {
             var client = await _IClientRepo.DeleteClient(id);

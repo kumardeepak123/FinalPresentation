@@ -1,6 +1,7 @@
 ﻿using CPMS.Dtos;
 using CPMS.Models;
 using CPMS.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,6 +23,7 @@ namespace CPMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> CreateEmployee(EmployeeDto employee)
         {
             var res = await _IEmployeeRepo.CreateEmployee(employee);
@@ -34,6 +36,7 @@ namespace CPMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetEmployee([FromQuery]int? id= null)
         {
             var _employee = await _IEmployeeRepo.GetEmployee(id);
@@ -47,6 +50,7 @@ namespace CPMS.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> UpdateEmployee([FromBody]EmployeeDto employee, int id)
         {
             var res = await _IEmployeeRepo.UpdateEmployee(id, employee);
@@ -58,6 +62,7 @@ namespace CPMS.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
             var res = await _IEmployeeRepo.DeleteEmployee(id);
